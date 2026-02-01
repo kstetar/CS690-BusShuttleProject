@@ -38,6 +38,33 @@ public class ConsoleUI
                             "continue","end"
                         }));
             } while (command != "end");
+        } else if(mode == "manager")
+        {
+            string command;
+            do
+            {
+                command = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("What do you want to do?")
+                        .AddChoices(new[] {
+                            "add stop", "delete stop", "list all stops", "end"
+                        }));
+                if(command=="add stop") {
+                    var newStopName = AnsiConsole.Prompt(new TextPrompt<string>("Enter new stop name:"));
+                    dataManager.AddStop(newStopName);
+                } else if(command=="delete stop") {
+                    var selectedStop = AnsiConsole.Prompt(new SelectionPrompt<Stop>().Title("Select a stop").AddChoices(dataManager.Stops));
+                    dataManager.RemoveStop(selectedStop);
+                } else if(command=="list all stops") {
+                    var table = new Table();
+                    table.AddColumn("Stops");
+                    foreach(var stop in dataManager.Stops) {
+                        table.AddRow(stop.Name);
+                    }
+                    AnsiConsole.Write(table);
+                } 
+                
+            } while (command != "end");
         }
     }
     static string AskForInput(string message)
