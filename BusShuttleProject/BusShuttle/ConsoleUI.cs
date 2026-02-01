@@ -1,12 +1,10 @@
-using FileSaver;
-
 namespace BusShuttle;
 public class ConsoleUI
 {
-    DataManager fileSaver;
+    FileSaver fileSaver;
     public ConsoleUI()
     {
-        fileSaver = new DataManager("passenger-data.txt");
+        fileSaver = new FileSaver("passenger-data.txt");
     }
     public void Show()
     {

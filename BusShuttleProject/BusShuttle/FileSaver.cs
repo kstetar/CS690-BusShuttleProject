@@ -1,8 +1,8 @@
-namespace FileSaver;
-public class DataManager
+namespace BusShuttle;
+public class FileSaver
 {
     string fileName;
-    public DataManager(string fileName)
+    public FileSaver(string fileName)
     {
         this.fileName = fileName;
         File.Create(this.fileName).Close();
