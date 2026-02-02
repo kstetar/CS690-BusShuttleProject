@@ -28,8 +28,19 @@ public class DataManager {
         Loops[0].Stops.Add(Stops[4]);
 
         Drivers = new List<Driver>();
-        Drivers.Add(new Driver("Usual Driver"));
-        Drivers.Add(new Driver("Alternate Driver"));
+        if (File.Exists("drivers.txt"))
+        {
+            var driversFileContent = File.ReadAllLines("drivers.txt");
+            foreach(var driverName in driversFileContent) {
+                Drivers.Add(new Driver(driverName));
+            }
+        }
+        else
+        {
+            Drivers.Add(new Driver("Usual Driver"));
+            Drivers.Add(new Driver("Alternate Driver"));
+            SynchronizeDrivers();
+        }
         
         PassengerData = new List<PassengerData>();
         if(File.Exists("passenger-data.txt")) {
@@ -65,6 +76,21 @@ public class DataManager {
     public void RemoveStop(Stop toRemove) {
         this.Stops.Remove(toRemove);
         this.SynchronizeStops();
+    }
+
+    public void SynchronizeDrivers() {
+        File.Delete("drivers.txt");
+        foreach(var driver in Drivers) {
+            File.AppendAllText("drivers.txt",driver.Name+Environment.NewLine);
+        }
+    }
+    public void AddDriver(string newDriverName) {
+        this.Drivers.Add(new Driver(newDriverName));
+        this.SynchronizeDrivers();
+    }
+    public void RemoveDriver(Driver toRemove) {
+        this.Drivers.Remove(toRemove);
+        this.SynchronizeDrivers();
     }
 
 }

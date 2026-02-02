@@ -47,7 +47,9 @@ public class ConsoleUI
                     new SelectionPrompt<string>()
                         .Title("What do you want to do?")
                         .AddChoices(new[] {
-                            "show busiest stop", "add stop", "delete stop", "list all stops", "end"
+                            "show busiest stop", "add stop", "delete stop", "list all stops", 
+                            "add driver", "delete driver", "list all drivers",
+                            "end"
                         }));
                 if(command=="add stop") {
                     var newStopName = AnsiConsole.Prompt(new TextPrompt<string>("Enter new stop name:"));
@@ -65,6 +67,21 @@ public class ConsoleUI
                 } else if(command=="show busiest stop") {
                     var result = Reporter.FindBusiestStop(dataManager.PassengerData);
                     Console.WriteLine("The busiest stop is: "+result.Name);
+                } else if(command=="add driver") {
+                    var newDriverName = AnsiConsole.Prompt(new TextPrompt<string>("Enter new driver name:"));
+                    dataManager.AddDriver(newDriverName);
+                } else if(command=="delete driver") {
+                    var selectedDriver = AnsiConsole.Prompt(new SelectionPrompt<Driver>()
+                    .Title("Select a driver")
+                    .AddChoices(dataManager.Drivers));
+                    dataManager.RemoveDriver(selectedDriver);
+                } else if(command=="list all drivers") {
+                    var table = new Table();
+                    table.AddColumn("Drivers");
+                    foreach(var driver in dataManager.Drivers) {
+                        table.AddRow(driver.Name);
+                    }
+                    AnsiConsole.Write(table);
                 }
                 
             } while (command != "end");
